@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow">
-<title>Bug Orario Live - brunorachiele.it</title>
+<title>Bug Orario Fox Style - brunorachiele.it</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -16,73 +16,93 @@
     background: transparent;
   }
 
-  /* CONTENITORE FISSO IN BASSO A DESTRA */
-  .news-bug {
+  /* CONTENITORE QUADRATO COMPATTATO IN BASSO A DESTRA (STILE FOX NEWS) */
+  .fox-bug {
     position: absolute;
-    bottom: 46px;
-    right: 54px;
-    width: 230px;
-    border-radius: 14px;
+    bottom: 38px;
+    right: 44px;
+    width: 136px;
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55), 0 0 0 1.5px rgba(255, 255, 255, 0.35);
     display: flex;
     flex-direction: column;
-    animation: bugEnter 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: bugEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes bugEnter {
-    0% { opacity: 0; transform: translateY(24px) scale(0.95); }
+    0% { opacity: 0; transform: translateY(18px) scale(0.94); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* RIQUADRO LOGO SUPERIORE */
-  .bug-logo-box {
-    background: rgba(255, 255, 255, 0.98);
-    padding: 14px 18px;
+  /* FILETTO ROSSO SUPERIORE TIPICO FOX NEWS */
+  .fox-top-stripe {
+    height: 5px;
+    background: linear-gradient(90deg, #b91c1c 0%, #ef4444 50%, #b91c1c 100%);
+  }
+
+  /* QUADRATO PRINCIPALE CON LOGO */
+  .fox-square {
+    height: 104px;
+    background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+    padding: 12px 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
 
-  .bug-logo-box img {
+  /* Riflesso televisivo leggero stile broadcast */
+  .fox-square::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 55%);
+    pointer-events: none;
+  }
+
+  .fox-square img {
     width: 100%;
-    max-height: 54px;
+    max-height: 76px;
     object-fit: contain;
     display: block;
+    position: relative;
+    z-index: 1;
   }
 
-  /* FASCIA ORARIO STILE ALL-NEWS INFERIORE */
-  .bug-time-box {
-    background: linear-gradient(135deg, #0b4a9f 0%, #072f66 100%);
-    border-top: 3px solid #dc2626;
-    padding: 7px 14px;
+  /* FASCIA ORARIO SOTTO IL QUADRATO */
+  .fox-time-bar {
+    height: 30px;
+    background: linear-gradient(180deg, #0b4a9f 0%, #05234d 100%);
+    border-top: 2px solid #dc2626;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
+    padding: 0 8px;
   }
 
   .live-dot {
-    width: 9px;
-    height: 9px;
+    width: 6px;
+    height: 6px;
     background: #ef4444;
     border-radius: 50%;
-    box-shadow: 0 0 8px #ef4444;
+    box-shadow: 0 0 6px #ef4444;
     animation: pulseDot 1.4s infinite;
     flex-shrink: 0;
   }
 
   @keyframes pulseDot {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
+    50% { opacity: 0.35; transform: scale(0.75); }
   }
 
   .clock-text {
-    font-family: 'Chakra Petch', 'Inter', sans-serif;
-    font-size: 30px;
+    font-family: 'Oswald', 'Chakra Petch', sans-serif;
+    font-size: 19px;
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
@@ -99,11 +119,12 @@
 </head>
 <body>
 
-  <div class="news-bug">
-    <div class="bug-logo-box">
+  <div class="fox-bug">
+    <div class="fox-top-stripe"></div>
+    <div class="fox-square">
       <img src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
     </div>
-    <div class="bug-time-box">
+    <div class="fox-time-bar">
       <span class="live-dot"></span>
       <div class="clock-text" id="live-clock">--<span class="clock-colon">:</span>--</div>
     </div>
