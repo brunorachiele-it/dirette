@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow">
-<title>Sigla Rassegna Stampa Focus - brunorachiele.it</title>
+<title>Sigla Rassegna Stampa - brunorachiele.it</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@800;900&display=swap" rel="stylesheet">
@@ -21,9 +21,10 @@
   #stage {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 70% 30%, #1d4ed8 0%, #091e42 50%, #020617 100%);
+    background: radial-gradient(circle at 70% 30%, #1d4ed8 0%, #091e42 52%, #020617 100%);
     overflow: hidden;
-    transition: clip-path 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+    will-change: clip-path;
+    transition: clip-path 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     clip-path: inset(0 0 0 0);
   }
 
@@ -31,20 +32,15 @@
     clip-path: inset(0 0 0 100%);
   }
 
-  /* OSCILLO / DIMMER DI SFONDO QUANDO PARTE LO ZOOM SUL GIORNALE */
-  #focus-backdrop {
+  /* GRIGLIA LEGGERA DI SFONDO (GPU-friendly) */
+  .bg-grid {
     position: absolute;
     inset: 0;
-    background: rgba(2, 6, 23, 0.72);
-    backdrop-filter: blur(6px);
-    opacity: 0;
-    z-index: 30;
-    transition: opacity 0.45s ease;
-    pointer-events: none;
-  }
-
-  #focus-backdrop.active {
-    opacity: 1;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 72px 72px;
+    z-index: 1;
   }
 
   /* FASCE DIAGONALI DINAMICHE STILE BREAKING NEWS */
@@ -54,9 +50,10 @@
     left: -10%;
     width: 55%;
     height: 150%;
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.85) 0%, rgba(185, 28, 28, 0.2) 100%);
-    transform: skewX(-18deg) translateX(-120%);
-    animation: slashIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.85) 0%, rgba(185, 28, 28, 0.18) 100%);
+    transform: skewX(-18deg) translate3d(-120%, 0, 0);
+    will-change: transform;
+    animation: slashIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     z-index: 2;
   }
 
@@ -66,50 +63,26 @@
     left: 38%;
     width: 14px;
     height: 150%;
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 0 35px #ffffff;
-    transform: skewX(-18deg) translateY(-100%);
-    animation: stripeDrop 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 0 28px rgba(255, 255, 255, 0.8);
+    transform: skewX(-18deg) translate3d(0, -100%, 0);
+    will-change: transform;
+    animation: stripeDrop 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
     z-index: 3;
   }
 
   @keyframes slashIn {
-    to { transform: skewX(-18deg) translateX(0); }
+    to { transform: skewX(-18deg) translate3d(0, 0, 0); }
   }
 
   @keyframes stripeDrop {
-    to { transform: skewX(-18deg) translateY(0); }
-  }
-
-  /* SFONDO CON COPIE SFOCATE IN MOVIMENTO VELOCE */
-  .bg-ticker-track {
-    position: absolute;
-    inset: -100px;
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    opacity: 0.16;
-    filter: blur(6px) contrast(1.2);
-    transform: rotate(-8deg) scale(1.15);
-    animation: bgRush 9s linear forwards;
-    z-index: 1;
-  }
-
-  .bg-ticker-track img {
-    height: 620px;
-    width: auto;
-    border-radius: 12px;
-  }
-
-  @keyframes bgRush {
-    0% { transform: rotate(-8deg) scale(1.15) translateX(100px); }
-    100% { transform: rotate(-8deg) scale(1.15) translateX(-900px); }
+    to { transform: skewX(-18deg) translate3d(0, 0, 0); }
   }
 
   /* COLONNA SINISTRA: BRAND & TITOLO GIGANTE */
   .left-brand-zone {
     position: absolute;
-    left: 90px;
+    left: 95px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 20;
@@ -124,8 +97,9 @@
     background: #ffffff;
     padding: 18px 34px;
     border-radius: 14px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    animation: popLeft 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48);
+    will-change: transform, opacity;
+    animation: popLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .brand-pill img {
@@ -135,8 +109,8 @@
   }
 
   @keyframes popLeft {
-    0% { opacity: 0; transform: translateX(-80px) scale(0.9); }
-    100% { opacity: 1; transform: translateX(0) scale(1); }
+    0% { opacity: 0; transform: translate3d(-70px, 0, 0) scale(0.92); }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
   }
 
   .kicker-tag {
@@ -151,9 +125,10 @@
     padding: 8px 24px;
     border-radius: 6px;
     text-transform: uppercase;
-    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.6);
+    box-shadow: 0 10px 26px rgba(220, 38, 38, 0.55);
     opacity: 0;
-    animation: popLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    will-change: transform, opacity;
+    animation: popLeft 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards;
   }
 
   .rec-dot {
@@ -166,7 +141,7 @@
 
   @keyframes blink {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.2; }
+    50% { opacity: 0.25; }
   }
 
   .main-headline {
@@ -176,9 +151,10 @@
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: -1px;
-    text-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+    text-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
     opacity: 0;
-    animation: popLeft 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.32s forwards;
+    will-change: transform, opacity;
+    animation: popLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
   }
 
   .main-headline span {
@@ -190,19 +166,20 @@
     font-size: 22px;
     font-weight: 800;
     color: #e2e8f0;
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.85);
     border-left: 5px solid #38bdf8;
     padding: 10px 20px;
     letter-spacing: 1px;
     text-transform: uppercase;
     opacity: 0;
-    animation: popLeft 0.5s ease 0.45s forwards;
+    will-change: transform, opacity;
+    animation: popLeft 0.45s ease 0.4s forwards;
   }
 
   /* COLONNA DESTRA: PALCOSCENICO 3D CON LE PRIME PAGINE PULITE (SENZA BOX NOME) */
   .right-cover-stage {
     position: absolute;
-    right: 110px;
+    right: 115px;
     top: 50%;
     transform: translateY(-50%);
     width: 620px;
@@ -217,110 +194,38 @@
     background: #ffffff;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.8), 0 0 0 4px #ffffff;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.72), 0 0 0 4px #ffffff;
     opacity: 0;
-    transform: translateX(260px) rotateY(-28deg) scale(0.85);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translate3d(220px, 0, 0) rotateY(-24deg) scale(0.88);
+    will-change: transform, opacity;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
   }
 
   .hero-paper.active {
     opacity: 1;
-    transform: translateX(0) rotateY(-10deg) scale(1);
+    transform: translate3d(0, 0, 0) rotateY(-10deg) scale(1);
     z-index: 5;
   }
 
   .hero-paper.prev {
     opacity: 0;
-    transform: translateX(-180px) rotateY(18deg) scale(0.88);
+    transform: translate3d(-150px, 0, 0) rotateY(15deg) scale(0.9);
     z-index: 2;
   }
 
   .hero-paper img {
-    width: 100%;
-    height: 100%;
+    width: 620px;
+    height: 860px;
     object-fit: cover;
     object-position: top center;
     display: block;
-  }
-
-  .hero-paper::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
-    transform: skewX(-20deg);
-    animation: glossSweep 1.1s ease-out forwards;
-  }
-
-  @keyframes glossSweep {
-    to { left: 160%; }
-  }
-
-  /* GIORNALE CASUALE INGRANDITO AL CENTRO CON EVIDENZIATORE */
-  #spotlight-card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 660px;
-    height: 920px;
-    border-radius: 18px;
-    overflow: hidden;
-    background: #ffffff;
-    z-index: 40;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.65) rotate(-3deg);
-    box-shadow: 0 45px 120px rgba(0, 0, 0, 0.92), 0 0 0 5px #38bdf8, 0 0 65px rgba(56, 189, 248, 0.65);
-    transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-  }
-
-  #spotlight-card.zoom-in {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.06) rotate(0deg);
-  }
-
-  #spotlight-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-    display: block;
-    transition: transform 2.2s ease-out;
-    transform: scale(1);
-  }
-
-  #spotlight-card.zoom-in img {
-    transform: scale(1.14) translateY(3%);
-  }
-
-  /* FASCIA EVIDENZIATRICE ANIMATA SUL TITOLO DI APERTURA */
-  .highlighter-sweep {
-    position: absolute;
-    top: 19%;
-    left: 6%;
-    right: 6%;
-    height: 23%;
-    border-radius: 10px;
-    border: 4px solid #facc15;
-    background: linear-gradient(90deg, rgba(250, 204, 21, 0.32) 0%, rgba(250, 204, 21, 0.14) 100%);
-    box-shadow: 0 0 35px rgba(250, 204, 21, 0.6), inset 0 0 20px rgba(250, 204, 21, 0.3);
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
-  }
-
-  #spotlight-card.zoom-in .highlighter-sweep {
-    clip-path: inset(0 0 0 0);
   }
 </style>
 </head>
 <body>
 
   <div id="stage">
-    <!-- Sfondo con prime pagine in corsa -->
-    <div class="bg-ticker-track" id="bg-track"></div>
+    <div class="bg-grid"></div>
 
     <!-- Tagli diagonali ad alto impatto -->
     <div class="slash-bg"></div>
@@ -338,13 +243,6 @@
 
     <!-- Lato destro: Copertine grandi pulite senza box nome -->
     <div class="right-cover-stage" id="hero-stage"></div>
-
-    <!-- Dimmer + Giornale casuale ingrandito ed evidenziato -->
-    <div id="focus-backdrop"></div>
-    <div id="spotlight-card">
-      <img id="spotlight-img" src="" alt="">
-      <div class="highlighter-sweep"></div>
-    </div>
   </div>
 
 <script>
@@ -357,7 +255,6 @@
   });
   document.getElementById('today-date').textContent = oggi;
 
-  // Testate dalla cartella statica
   const testate = [
     'corriere-della-sera',
     'la-repubblica',
@@ -372,48 +269,34 @@
   const baseUrl = 'https://static.brunorachiele.it/copertine/';
   const bust = '?v=' + new Date().toISOString().slice(0, 13);
 
-  function setImgWithFallback(imgEl, slug) {
-    const exts = ['.webp', '.jpg', '.png'];
-    let idx = 0;
-    imgEl.src = baseUrl + slug + exts[idx] + bust;
-    imgEl.onerror = () => {
-      idx++;
-      if (idx < exts.length) {
-        imgEl.src = baseUrl + slug + exts[idx] + bust;
-      }
-    };
-  }
-
   const heroStage = document.getElementById('hero-stage');
-  const bgTrack = document.getElementById('bg-track');
   const cards = [];
 
   testate.forEach((slug) => {
-    // Card pulita senza alcun box con il nome
     const card = document.createElement('div');
     card.className = 'hero-paper';
+
     const img = document.createElement('img');
+    img.src = baseUrl + slug + '.webp' + bust;
     img.alt = slug;
-    setImgWithFallback(img, slug);
+    img.decoding = 'async';
+    img.onerror = function() {
+      if (!this.dataset.retried) {
+        this.dataset.retried = '1';
+        this.src = baseUrl + slug + '.jpg' + bust;
+      }
+    };
+
     card.appendChild(img);
     heroStage.appendChild(card);
     cards.push(card);
-
-    // Copia sfocata nello sfondo in corsa
-    const bgImg = document.createElement('img');
-    setImgWithFallback(bgImg, slug);
-    bgTrack.appendChild(bgImg);
   });
 
-  // Seleziona un giornale completamente a caso per lo zoom finale
-  const randomSlug = testate[Math.floor(Math.random() * testate.length)];
-  setImgWithFallback(document.getElementById('spotlight-img'), randomSlug);
-
-  // Carrellata veloce delle prime pagine (primi 5.5 secondi)
+  // Carrellata fluida delle prime pagine (0.8s ciascuna)
   let current = 0;
   setTimeout(() => {
     cards[0].classList.add('active');
-  }, 350);
+  }, 320);
 
   const slideTimer = setInterval(() => {
     if (current < cards.length - 1) {
@@ -424,19 +307,13 @@
     } else {
       clearInterval(slideTimer);
     }
-  }, 720);
+  }, 800);
 
-  // Al secondo 5.7: ferma la carrellata, porta al centro il giornale casuale ingrandito ed evidenzia la prima pagina
+  // A 7.1 secondi apre a sipario direttamente sulla tua telecamera in studio
   setTimeout(() => {
     clearInterval(slideTimer);
-    document.getElementById('focus-backdrop').classList.add('active');
-    document.getElementById('spotlight-card').classList.add('zoom-in');
-  }, 5700);
-
-  // Al secondo 8.5: apre a sipario direttamente sulla tua telecamera in studio
-  setTimeout(() => {
     document.getElementById('stage').classList.add('curtain-out');
-  }, 8500);
+  }, 7100);
 </script>
 </body>
 </html>
