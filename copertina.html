@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Copertina Live - brunorachiele.it</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: radial-gradient(circle at 28% 22%, #103875 0%, #071936 55%, #030a17 100%);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* GRIGLIA PROSPETTICA IN MOVIMENTO CONTINUO */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    transform: perspective(900px) rotateX(25deg) scale(1.25);
+    transform-origin: center top;
+    animation: gridMove 8s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 128px; }
+  }
+
+  /* FASCIO DI LUCE PERIODICO STILE ALL-NEWS */
+  .light-sweep {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(115deg, transparent 43%, rgba(56, 189, 248, 0.14) 50%, transparent 57%);
+    animation: sweep 6s ease-in-out infinite;
+  }
+
+  @keyframes sweep {
+    0% { transform: translateX(-45%); }
+    50%, 100% { transform: translateX(45%); }
+  }
+
+  /* ALONE LUMINOSO DIETRO LA CARD */
+  .ambient-glow {
+    position: absolute;
+    width: 720px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
+    filter: blur(30px);
+    animation: breatheGlow 4s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  @keyframes breatheGlow {
+    0%, 100% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
+  /* CARD CENTRALE CON LOGO */
+  .logo-card {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 48px 82px;
+    border-radius: 28px;
+    box-shadow: 0 32px 85px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: cardEnter 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes cardEnter {
+    0% { opacity: 0; transform: scale(0.85) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .logo-card img {
+    height: 135px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .logo-subtitle {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0b4a9f;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+  }
+
+  .status-pill {
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 10px 26px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.3);
+  }
+
+  .live-dot {
+    width: 12px;
+    height: 12px;
+    background: #ef4444;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ef4444;
+    animation: pulse 1.2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.75); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="grid-overlay"></div>
+  <div class="light-sweep"></div>
+  <div class="ambient-glow"></div>
+
+  <div class="logo-card">
+    <img src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
+    <div class="logo-subtitle">Analisi • Rassegna Stampa • Sondaggi</div>
+    <div class="status-pill">
+      <span class="live-dot"></span>
+      <span id="status-text">A BREVE IN DIRETTA</span>
+    </div>
+  </div>
+
+  <!-- Audio opzionale se carichi musica.mp3 nel repo dirette -->
+  <audio id="bg-music" loop></audio>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  // Personalizza la scritta (?testo=TORNIAMO TRA POCO)
+  if (params.get('testo')) {
+    document.getElementById('status-text').textContent = params.get('testo');
+  }
+
+  // Se aggiungi ?audio=musica.mp3 riproduce il file audio in loop
+  if (params.get('audio')) {
+    const audioEl = document.getElementById('bg-music');
+    audioEl.src = params.get('audio');
+    audioEl.volume = 0.35;
+    audioEl.play().catch(() => {});
+  }
+</script>
+</body>
+</html>
