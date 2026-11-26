@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow">
-<title>Sigla Live - brunorachiele.it</title>
+<title>Intro Live 10s - brunorachiele.it</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -14,34 +14,34 @@
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   }
 
-  /* SFONDO ANIMATO INIZIALE (si dissolve a fine sigla) */
+  /* SFONDO EDITORIALE BLU/SCURO (sfuma a fine intro) */
   #bg-stage {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 30% 20%, #103875 0%, #071936 55%, #030a17 100%);
+    background: radial-gradient(circle at 25% 20%, #103875 0%, #071936 55%, #030a17 100%);
     z-index: 1;
     transition: opacity 0.9s ease-out;
   }
 
-  /* GRIGLIA EDITORIALE STILE SKY TG24 */
+  /* GRIGLIA PROSPETTICA */
   .grid-overlay {
     position: absolute;
     inset: 0;
     background-image: 
-      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
+      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
     transform: perspective(900px) rotateX(25deg) scale(1.2);
     transform-origin: center top;
-    animation: gridMove 8s linear infinite;
+    animation: gridMove 10s linear infinite;
   }
 
   @keyframes gridMove {
     0% { background-position: 0 0; }
-    100% { background-position: 0 120px; }
+    100% { background-position: 0 180px; }
   }
 
-  /* FASCIO DI LUCE DINAMICO */
+  /* FASCIO DI LUCE */
   .light-sweep {
     position: absolute;
     top: -50%;
@@ -49,15 +49,93 @@
     width: 200%;
     height: 200%;
     background: linear-gradient(115deg, transparent 42%, rgba(56, 189, 248, 0.16) 50%, transparent 58%);
-    animation: sweep 3.2s ease-in-out forwards;
+    animation: sweep 4.5s ease-in-out forwards;
   }
 
   @keyframes sweep {
-    0% { transform: translateX(-40%); }
-    100% { transform: translateX(40%); }
+    0% { transform: translateX(-45%); }
+    100% { transform: translateX(45%); }
   }
 
-  /* CONTENITORE LOGO CENTRALE */
+  /* COUNTDOWN IN DIRETTA (IN ALTO A DESTRA) */
+  #countdown-box {
+    position: absolute;
+    top: 44px;
+    right: 56px;
+    z-index: 30;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  #countdown-box.exit {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  .cd-live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 11px;
+    height: 11px;
+    background: #ffffff;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.75); }
+  }
+
+  .cd-text-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cd-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .cd-timer {
+    font-size: 38px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cd-timer span {
+    font-size: 20px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-left: 3px;
+  }
+
+  /* LOGO DI APERTURA CENTRALE (primi 2.3 secondi) */
   #logo-intro {
     position: absolute;
     inset: 0;
@@ -65,25 +143,26 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 15;
     transition: all 0.85s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   #logo-intro.minimized {
-    transform: translate(-740px, -430px) scale(0.36);
+    transform: translate(-720px, -410px) scale(0.42);
     opacity: 0;
+    pointer-events: none;
   }
 
   .logo-card {
-    background: rgba(255, 255, 255, 0.96);
-    padding: 36px 64px;
-    border-radius: 24px;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55), 0 0 0 2px rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.97);
+    padding: 40px 70px;
+    border-radius: 26px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255,255,255,0.25);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    animation: logoPop 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: logoPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes logoPop {
@@ -92,40 +171,20 @@
   }
 
   .logo-card img {
-    height: 110px;
+    height: 120px;
     width: auto;
     object-fit: contain;
   }
 
-  .live-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: #dc2626;
-    color: #fff;
+  .logo-subtitle {
+    font-size: 18px;
     font-weight: 800;
-    font-size: 20px;
+    color: #0b4a9f;
     letter-spacing: 2px;
-    padding: 8px 22px;
-    border-radius: 999px;
     text-transform: uppercase;
-    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
   }
 
-  .live-dot {
-    width: 12px;
-    height: 12px;
-    background: #fff;
-    border-radius: 50%;
-    animation: pulse 1s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.75); }
-  }
-
-  /* FINESTRA SCORRIMENTO SITO IN PROSPETTIVA 3D */
+  /* SCORRIMENTO PROFONDO DEL SITO (da 2.2s a 9.5s) */
   #site-showcase {
     position: absolute;
     inset: 0;
@@ -134,8 +193,8 @@
     justify-content: center;
     z-index: 5;
     opacity: 0;
-    perspective: 1600px;
-    transition: opacity 0.7s ease, transform 0.8s ease;
+    perspective: 1700px;
+    transition: opacity 0.8s ease, transform 0.9s ease;
     pointer-events: none;
   }
 
@@ -145,31 +204,33 @@
 
   #site-showcase.exit {
     opacity: 0;
-    transform: scale(1.08);
+    transform: scale(1.06);
   }
 
   .browser-frame {
-    width: 1380px;
-    height: 820px;
+    width: 1460px;
+    height: 860px;
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7), 0 0 0 3px rgba(56, 189, 248, 0.45);
-    transform: rotateY(-11deg) rotateX(4deg);
-    animation: cameraPan 4.2s ease-in-out forwards;
+    box-shadow: 0 38px 95px rgba(0, 0, 0, 0.75), 0 0 0 3px rgba(56, 189, 248, 0.45);
+    transform: rotateY(-10deg) rotateX(4deg);
+    animation: cameraPan 7.8s ease-in-out forwards;
+    animation-delay: 2.1s;
   }
 
   @keyframes cameraPan {
-    0% { transform: rotateY(-14deg) rotateX(6deg) scale(0.92); }
-    100% { transform: rotateY(-6deg) rotateX(2deg) scale(1.02); }
+    0% { transform: rotateY(-12deg) rotateX(5deg) scale(0.93); }
+    50% { transform: rotateY(-5deg) rotateX(2deg) scale(1.0); }
+    100% { transform: rotateY(4deg) rotateX(1deg) scale(1.03); }
   }
 
   .browser-bar {
-    height: 46px;
+    height: 48px;
     background: #0f172a;
     display: flex;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 22px;
     gap: 10px;
   }
 
@@ -191,115 +252,54 @@
 
   .site-viewport {
     width: 100%;
-    height: 774px;
+    height: 812px;
     overflow: hidden;
     position: relative;
     background: #f8fafc;
   }
 
+  /* Iframe molto alto per permettere uno scorrimento profondo lungo tutta la home */
   .site-viewport iframe {
-    width: 1380px;
-    height: 2400px;
+    width: 1460px;
+    height: 3800px;
     border: none;
     transform: translateY(0);
-    animation: scrollSite 3.8s cubic-bezier(0.35, 0, 0.25, 1) forwards;
-    animation-delay: 2.2s;
+    animation: scrollSiteDeep 7.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation-delay: 2.3s;
   }
 
-  @keyframes scrollSite {
+  @keyframes scrollSiteDeep {
     0% { transform: translateY(0); }
-    100% { transform: translateY(-780px); }
-  }
-
-  /* SOTTOPANCIA INFERIORE TELEVISIVO (RESTA ANCHE DOPO LA SIGLA) */
-  #lower-third {
-    position: absolute;
-    bottom: 48px;
-    left: 64px;
-    right: 64px;
-    display: flex;
-    align-items: stretch;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
-    z-index: 20;
-    transform: translateY(180px);
-    opacity: 0;
-    transition: all 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  #lower-third.visible {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  .lt-brand {
-    background: #ffffff;
-    padding: 16px 28px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    border-right: 4px solid #0b4a9f;
-  }
-
-  .lt-brand img {
-    height: 44px;
-    width: auto;
-  }
-
-  .lt-badge {
-    background: #dc2626;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 6px;
-    letter-spacing: 1px;
-  }
-
-  .lt-content {
-    flex: 1;
-    background: linear-gradient(90deg, #0b4a9f 0%, #072f66 100%);
-    color: #ffffff;
-    padding: 14px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .lt-kicker {
-    font-size: 14px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #7dd3fc;
-    margin-bottom: 2px;
-  }
-
-  .lt-title {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
+    100% { transform: translateY(-2200px); }
   }
 </style>
 </head>
 <body>
 
-  <!-- SFONDO BLU/SCURO EDITORIALE -->
+  <!-- SFONDO -->
   <div id="bg-stage">
     <div class="grid-overlay"></div>
     <div class="light-sweep"></div>
   </div>
 
-  <!-- 1. APERTURA LOGO -->
-  <div id="logo-intro">
-    <div class="logo-card">
-      <img src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
-      <div class="live-pill"><span class="live-dot"></span> IN DIRETTA</div>
+  <!-- COUNTDOWN 10 SECONDI -->
+  <div id="countdown-box">
+    <div class="cd-live-indicator"><span class="live-dot"></span> LIVE</div>
+    <div class="cd-text-wrap">
+      <div class="cd-label" id="cd-label">IN DIRETTA TRA</div>
+      <div class="cd-timer" id="cd-timer">10<span>sec</span></div>
     </div>
   </div>
 
-  <!-- 2. SCORRIMENTO DEL SITO -->
+  <!-- 1. LOGO CENTRALE -->
+  <div id="logo-intro">
+    <div class="logo-card">
+      <img src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
+      <div class="logo-subtitle">Analisi • Rassegna Stampa • Sondaggi</div>
+    </div>
+  </div>
+
+  <!-- 2. SCORRIMENTO SITO -->
   <div id="site-showcase">
     <div class="browser-frame">
       <div class="browser-bar">
@@ -314,41 +314,35 @@
     </div>
   </div>
 
-  <!-- 3. SOTTOPANCIA FINALE IN STUDIO -->
-  <div id="lower-third">
-    <div class="lt-brand">
-      <img src="https://static.brunorachiele.it/logo.png" alt="Logo">
-      <span class="lt-badge">LIVE</span>
-    </div>
-    <div class="lt-content">
-      <div class="lt-kicker" id="lt-kicker">ANALISI, RASSEGNA STAMPA E SONDAGGI</div>
-      <div class="lt-title" id="lt-title">Le notizie del giorno su brunorachiele.it</div>
-    </div>
-  </div>
-
 <script>
-  // Legge eventuali parametri URL (?occhiello=...&titolo=...)
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('occhiello')) document.getElementById('lt-kicker').textContent = params.get('occhiello');
-  if (params.get('titolo')) document.getElementById('lt-title').textContent = params.get('titolo');
+  // Countdown reale da 10 a 0
+  let secondsLeft = 10;
+  const timerEl = document.getElementById('cd-timer');
+  const labelEl = document.getElementById('cd-label');
 
-  // Sequenza temporale stile Sky TG24 (totale ~6.5 secondi)
+  const countdownInterval = setInterval(() => {
+    secondsLeft--;
+    if (secondsLeft > 0) {
+      timerEl.innerHTML = secondsLeft + '<span>sec</span>';
+    } else {
+      clearInterval(countdownInterval);
+      labelEl.textContent = 'COLLEGAMENTO';
+      timerEl.innerHTML = 'IN ONDA';
+    }
+  }, 1000);
+
+  // 2.2s: sposta il logo e fa partire lo scorrimento profondo del sito
   setTimeout(() => {
-    // 2.1s: sposta il logo e mostra il sito che scorre
     document.getElementById('logo-intro').classList.add('minimized');
     document.getElementById('site-showcase').classList.add('active');
-  }, 2100);
+  }, 2200);
 
+  // 9.8s: dissolve tutto (sfondo, sito e countdown) lasciando pulita la telecamera in studio
   setTimeout(() => {
-    // 5.6s: fa entrare il sottopancia in basso
-    document.getElementById('lower-third').classList.add('visible');
-  }, 5600);
-
-  setTimeout(() => {
-    // 6.1s: dissolve lo sfondo e il sito, lasciando la tua camera in studio + sottopancia
     document.getElementById('site-showcase').classList.add('exit');
+    document.getElementById('countdown-box').classList.add('exit');
     document.getElementById('bg-stage').style.opacity = '0';
-  }, 6100);
+  }, 9800);
 </script>
 </body>
 </html>
