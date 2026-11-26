@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow">
-<title>Sigla Rassegna Stampa High-Impact - brunorachiele.it</title>
+<title>Sigla Rassegna Stampa Focus - brunorachiele.it</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@800;900&display=swap" rel="stylesheet">
@@ -23,12 +23,28 @@
     inset: 0;
     background: radial-gradient(circle at 70% 30%, #1d4ed8 0%, #091e42 50%, #020617 100%);
     overflow: hidden;
-    transition: clip-path 0.65s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
+    transition: clip-path 0.65s cubic-bezier(0.77, 0, 0.175, 1);
     clip-path: inset(0 0 0 0);
   }
 
   #stage.curtain-out {
     clip-path: inset(0 0 0 100%);
+  }
+
+  /* OSCILLO / DIMMER DI SFONDO QUANDO PARTE LO ZOOM SUL GIORNALE */
+  #focus-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.72);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    z-index: 30;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+  }
+
+  #focus-backdrop.active {
+    opacity: 1;
   }
 
   /* FASCE DIAGONALI DINAMICHE STILE BREAKING NEWS */
@@ -75,7 +91,7 @@
     opacity: 0.16;
     filter: blur(6px) contrast(1.2);
     transform: rotate(-8deg) scale(1.15);
-    animation: bgRush 8s linear forwards;
+    animation: bgRush 9s linear forwards;
     z-index: 1;
   }
 
@@ -183,7 +199,7 @@
     animation: popLeft 0.5s ease 0.45s forwards;
   }
 
-  /* COLONNA DESTRA: PALCOSCENICO 3D CON LE PRIME PAGINE IN PRIMO PIANO */
+  /* COLONNA DESTRA: PALCOSCENICO 3D CON LE PRIME PAGINE PULITE (SENZA BOX NOME) */
   .right-cover-stage {
     position: absolute;
     right: 110px;
@@ -204,7 +220,7 @@
     box-shadow: 0 35px 90px rgba(0, 0, 0, 0.8), 0 0 0 4px #ffffff;
     opacity: 0;
     transform: translateX(260px) rotateY(-28deg) scale(0.85);
-    transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .hero-paper.active {
@@ -227,7 +243,6 @@
     display: block;
   }
 
-  /* Riflesso dinamico che attraversa la copertina */
   .hero-paper::after {
     content: "";
     position: absolute;
@@ -237,27 +252,67 @@
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
     transform: skewX(-20deg);
-    animation: glossSweep 1.2s ease-out forwards;
+    animation: glossSweep 1.1s ease-out forwards;
   }
 
   @keyframes glossSweep {
     to { left: 160%; }
   }
 
-  .hero-paper-tag {
+  /* GIORNALE CASUALE INGRANDITO AL CENTRO CON EVIDENZIATORE */
+  #spotlight-card {
     position: absolute;
-    top: 22px;
-    left: 22px;
-    background: #0b4a9f;
-    color: #ffffff;
-    font-family: 'Oswald', sans-serif;
-    font-size: 24px;
-    letter-spacing: 1.5px;
-    padding: 8px 20px;
-    border-radius: 6px;
-    text-transform: uppercase;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    border-left: 5px solid #ef4444;
+    top: 50%;
+    left: 50%;
+    width: 660px;
+    height: 920px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #ffffff;
+    z-index: 40;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.65) rotate(-3deg);
+    box-shadow: 0 45px 120px rgba(0, 0, 0, 0.92), 0 0 0 5px #38bdf8, 0 0 65px rgba(56, 189, 248, 0.65);
+    transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  #spotlight-card.zoom-in {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06) rotate(0deg);
+  }
+
+  #spotlight-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 2.2s ease-out;
+    transform: scale(1);
+  }
+
+  #spotlight-card.zoom-in img {
+    transform: scale(1.14) translateY(3%);
+  }
+
+  /* FASCIA EVIDENZIATRICE ANIMATA SUL TITOLO DI APERTURA */
+  .highlighter-sweep {
+    position: absolute;
+    top: 19%;
+    left: 6%;
+    right: 6%;
+    height: 23%;
+    border-radius: 10px;
+    border: 4px solid #facc15;
+    background: linear-gradient(90deg, rgba(250, 204, 21, 0.32) 0%, rgba(250, 204, 21, 0.14) 100%);
+    box-shadow: 0 0 35px rgba(250, 204, 21, 0.6), inset 0 0 20px rgba(250, 204, 21, 0.3);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+  }
+
+  #spotlight-card.zoom-in .highlighter-sweep {
+    clip-path: inset(0 0 0 0);
   }
 </style>
 </head>
@@ -281,8 +336,15 @@
       <div class="date-badge" id="today-date">RASSEGNA STAMPA QUOTIDIANA</div>
     </div>
 
-    <!-- Lato destro: Copertine grandi che scattano in primo piano -->
+    <!-- Lato destro: Copertine grandi pulite senza box nome -->
     <div class="right-cover-stage" id="hero-stage"></div>
+
+    <!-- Dimmer + Giornale casuale ingrandito ed evidenziato -->
+    <div id="focus-backdrop"></div>
+    <div id="spotlight-card">
+      <img id="spotlight-img" src="" alt="">
+      <div class="highlighter-sweep"></div>
+    </div>
   </div>
 
 <script>
@@ -295,22 +357,21 @@
   });
   document.getElementById('today-date').textContent = oggi;
 
-  // Testate con i nomi file reali della tua cartella static.brunorachiele.it/copertine/
+  // Testate dalla cartella statica
   const testate = [
-    { name: 'Corriere della Sera', slug: 'corriere-della-sera' },
-    { name: 'la Repubblica', slug: 'la-repubblica' },
-    { name: 'Il Sole 24 Ore', slug: 'il-sole-24-ore' },
-    { name: 'La Stampa', slug: 'la-stampa' },
-    { name: 'il Fatto Quotidiano', slug: 'il-fatto-quotidiano' },
-    { name: 'Il Giornale', slug: 'il-giornale' },
-    { name: 'Libero', slug: 'libero-quotidiano' },
-    { name: 'La Verità', slug: 'la-verita' }
+    'corriere-della-sera',
+    'la-repubblica',
+    'il-sole-24-ore',
+    'la-stampa',
+    'il-fatto-quotidiano',
+    'il-giornale',
+    'libero-quotidiano',
+    'la-verita'
   ];
 
   const baseUrl = 'https://static.brunorachiele.it/copertine/';
   const bust = '?v=' + new Date().toISOString().slice(0, 13);
 
-  // Fallback automatico tra .webp -> .jpg -> .png se un formato manca
   function setImgWithFallback(imgEl, slug) {
     const exts = ['.webp', '.jpg', '.png'];
     let idx = 0;
@@ -327,50 +388,55 @@
   const bgTrack = document.getElementById('bg-track');
   const cards = [];
 
-  testate.forEach((t, i) => {
-    // Card principale grande a destra
+  testate.forEach((slug) => {
+    // Card pulita senza alcun box con il nome
     const card = document.createElement('div');
     card.className = 'hero-paper';
     const img = document.createElement('img');
-    img.alt = t.name;
-    setImgWithFallback(img, t.slug);
-
-    const tag = document.createElement('div');
-    tag.className = 'hero-paper-tag';
-    tag.textContent = t.name;
-
+    img.alt = slug;
+    setImgWithFallback(img, slug);
     card.appendChild(img);
-    card.appendChild(tag);
     heroStage.appendChild(card);
     cards.push(card);
 
     // Copia sfocata nello sfondo in corsa
     const bgImg = document.createElement('img');
-    setImgWithFallback(bgImg, t.slug);
+    setImgWithFallback(bgImg, slug);
     bgTrack.appendChild(bgImg);
   });
 
-  // Sequenza rapida delle copertine (cambia ogni 0.85 secondi per ritmo televisivo)
+  // Seleziona un giornale completamente a caso per lo zoom finale
+  const randomSlug = testate[Math.floor(Math.random() * testate.length)];
+  setImgWithFallback(document.getElementById('spotlight-img'), randomSlug);
+
+  // Carrellata veloce delle prime pagine (primi 5.5 secondi)
   let current = 0;
   setTimeout(() => {
     cards[0].classList.add('active');
-  }, 400);
+  }, 350);
 
   const slideTimer = setInterval(() => {
-    cards[current].classList.remove('active');
-    cards[current].classList.add('prev');
-    current++;
-    if (current < cards.length) {
+    if (current < cards.length - 1) {
+      cards[current].classList.remove('active');
+      cards[current].classList.add('prev');
+      current++;
       cards[current].classList.add('active');
     } else {
       clearInterval(slideTimer);
     }
-  }, 850);
+  }, 720);
 
-  // A 7.6 secondi apre a sipario verso destra lasciando la tua telecamera in studio
+  // Al secondo 5.7: ferma la carrellata, porta al centro il giornale casuale ingrandito ed evidenzia la prima pagina
+  setTimeout(() => {
+    clearInterval(slideTimer);
+    document.getElementById('focus-backdrop').classList.add('active');
+    document.getElementById('spotlight-card').classList.add('zoom-in');
+  }, 5700);
+
+  // Al secondo 8.5: apre a sipario direttamente sulla tua telecamera in studio
   setTimeout(() => {
     document.getElementById('stage').classList.add('curtain-out');
-  }, 7600);
+  }, 8500);
 </script>
 </body>
 </html>
