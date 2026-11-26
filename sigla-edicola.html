@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Sigla Rassegna Stampa - brunorachiele.it</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: transparent;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* SFONDO EDITORIALE BLU/SCURO (sfuma a fine sigla) */
+  #bg-stage {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 25% 20%, #103875 0%, #071936 55%, #030a17 100%);
+    z-index: 1;
+    transition: opacity 0.9s ease-out;
+  }
+
+  /* GRIGLIA PROSPETTICA */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    transform: perspective(900px) rotateX(25deg) scale(1.25);
+    transform-origin: center top;
+    animation: gridMove 11s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 180px; }
+  }
+
+  /* FASCIO DI LUCE */
+  .light-sweep {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(115deg, transparent 42%, rgba(56, 189, 248, 0.16) 50%, transparent 58%);
+    animation: sweep 5s ease-in-out forwards;
+  }
+
+  @keyframes sweep {
+    0% { transform: translateX(-45%); }
+    100% { transform: translateX(45%); }
+  }
+
+  /* LOGO DI APERTURA CENTRALE (primi 2.3 secondi) */
+  #logo-intro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    transition: all 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  #logo-intro.minimized {
+    transform: translateY(-440px) scale(0.45);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .logo-card {
+    background: rgba(255, 255, 255, 0.97);
+    padding: 42px 74px;
+    border-radius: 26px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255,255,255,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    animation: logoPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes logoPop {
+    0% { opacity: 0; transform: scale(0.78) translateY(25px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .logo-card img {
+    height: 118px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .rassegna-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #0b4a9f;
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    padding: 9px 26px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 22px rgba(11, 74, 159, 0.4);
+  }
+
+  .live-dot {
+    width: 11px;
+    height: 11px;
+    background: #ef4444;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ef4444;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.75); }
+  }
+
+  /* MURO 3D DELLE PRIME PAGINE (da 2.1s a 10.2s) */
+  #news-wall-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    perspective: 1800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 34px;
+    opacity: 0;
+    transition: opacity 0.7s ease, transform 0.85s ease;
+    pointer-events: none;
+  }
+
+  #news-wall-stage.active {
+    opacity: 1;
+  }
+
+  #news-wall-stage.exit {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+
+  .wall-3d-plane {
+    transform: rotateY(-12deg) rotateX(5deg) rotateZ(-1.5deg);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    animation: wallCameraZoom 8.4s ease-in-out forwards;
+    animation-delay: 2.1s;
+  }
+
+  @keyframes wallCameraZoom {
+    0% { transform: rotateY(-15deg) rotateX(6deg) rotateZ(-2deg) scale(0.92); }
+    100% { transform: rotateY(-6deg) rotateX(2deg) rotateZ(-0.5deg) scale(1.04); }
+  }
+
+  .cover-row {
+    display: flex;
+    gap: 34px;
+    width: max-content;
+  }
+
+  /* Fila superiore scorre verso sinistra */
+  .row-top {
+    animation: slideLeft 8.5s cubic-bezier(0.22, 0.1, 0.25, 1) forwards;
+    animation-delay: 2.1s;
+  }
+
+  /* Fila inferiore parte sfalsata e scorre a velocità leggermente diversa (parallasse) */
+  .row-bottom {
+    transform: translateX(-260px);
+    animation: slideLeftSlow 8.5s cubic-bezier(0.22, 0.1, 0.25, 1) forwards;
+    animation-delay: 2.1s;
+  }
+
+  @keyframes slideLeft {
+    0% { transform: translateX(180px); }
+    100% { transform: translateX(-760px); }
+  }
+
+  @keyframes slideLeftSlow {
+    0% { transform: translateX(-40px); }
+    100% { transform: translateX(-920px); }
+  }
+
+  .newspaper-card {
+    width: 310px;
+    height: 435px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 55px rgba(0, 0, 0, 0.72), 0 0 0 2px rgba(255, 255, 255, 0.28);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Riflesso lucido diagonale sulla prima pagina */
+  .newspaper-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 48%);
+    pointer-events: none;
+  }
+
+  .newspaper-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .paper-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(0deg, rgba(3, 10, 23, 0.92) 0%, rgba(3, 10, 23, 0.65) 75%, transparent 100%);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 22px 14px 10px 14px;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+  <!-- SFONDO -->
+  <div id="bg-stage">
+    <div class="grid-overlay"></div>
+    <div class="light-sweep"></div>
+  </div>
+
+  <!-- 1. LOGO CENTRALE -->
+  <div id="logo-intro">
+    <div class="logo-card">
+      <img src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
+      <div class="rassegna-badge"><span class="live-dot"></span> RASSEGNA STAMPA</div>
+    </div>
+  </div>
+
+  <!-- 2. MURO 3D DELLE PRIME PAGINE -->
+  <div id="news-wall-stage">
+    <div class="wall-3d-plane">
+      <div class="cover-row row-top" id="row-top"></div>
+      <div class="cover-row row-bottom" id="row-bottom"></div>
+    </div>
+  </div>
+
+<script>
+  // Elenco delle 10 testate principali dalla tua cartella statica
+  const testateTop = [
+    { name: 'Corriere della Sera', file: 'corriere.jpg' },
+    { name: 'la Repubblica', file: 'repubblica.jpg' },
+    { name: 'Il Sole 24 Ore', file: 'sole24ore.jpg' },
+    { name: 'La Stampa', file: 'lastampa.jpg' },
+    { name: 'Il Messaggero', file: 'messaggero.jpg' },
+    { name: 'Corriere della Sera', file: 'corriere.jpg' }
+  ];
+
+  const testateBottom = [
+    { name: 'il Fatto Quotidiano', file: 'fattoquotidiano.jpg' },
+    { name: 'Il Giornale', file: 'ilgiornale.jpg' },
+    { name: 'Libero', file: 'libero.jpg' },
+    { name: 'Avvenire', file: 'avvenire.jpg' },
+    { name: 'La Gazzetta dello Sport', file: 'gazzetta.jpg' },
+    { name: 'la Repubblica', file: 'repubblica.jpg' }
+  ];
+
+  // Cache-buster giornaliero per mostrare sempre le copertine di oggi
+  const bust = '?v=' + new Date().toISOString().slice(0, 13);
+  const baseUrl = 'https://static.brunorachiele.it/copertine/';
+
+  function renderRow(containerId, items) {
+    const container = document.getElementById(containerId);
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'newspaper-card';
+      card.innerHTML = `
+        <img src="${baseUrl}${item.file}${bust}" alt="${item.name}">
+        <div class="paper-label">${item.name}</div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  renderRow('row-top', testateTop);
+  renderRow('row-bottom', testateBottom);
+
+  // Sequenza temporale (totale ~10.8 secondi)
+  setTimeout(() => {
+    document.getElementById('logo-intro').classList.add('minimized');
+    document.getElementById('news-wall-stage').classList.add('active');
+  }, 2100);
+
+  setTimeout(() => {
+    document.getElementById('news-wall-stage').classList.add('exit');
+    document.getElementById('bg-stage').style.opacity = '0';
+  }, 10000);
+</script>
+</body>
+</html>
