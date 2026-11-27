@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Intro Sky TG24 20s - brunorachiele.it</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Oswald:wght@700&family=Inter:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: transparent;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* CONTENITORE GENERALE (dissolvenza finale sullo studio) */
+  #master-stage {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 28% 22%, #103875 0%, #071936 55%, #030a17 100%);
+    overflow: hidden;
+    transition: clip-path 0.65s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease;
+    clip-path: inset(0 0 0 0);
+  }
+
+  #master-stage.studio-launch {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  /* GRIGLIA DI SFONDO LEGGERA */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+    z-index: 1;
+  }
+
+  /* BLOCCO LOGO + TIMER (Parte grande al centro, poi si sposta in alto a sinistra) */
+  #countdown-hud {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 22px;
+    padding: 36px 56px 28px 56px;
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.7), 0 0 0 3px rgba(56, 189, 248, 0.45);
+    will-change: transform, top, left;
+    transition: all 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Posizione compatta durante la navigazione del sito */
+  #countdown-hud.docked {
+    top: 32px;
+    left: 36px;
+    transform: translate(0, 0) scale(0.56);
+    transform-origin: top left;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), 0 0 0 3px #0b4a9f;
+  }
+
+  /* Ritorno al centro per gli ultimi 2 secondi di lancio */
+  #countdown-hud.final-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 35px 100px rgba(0, 0, 0, 0.85), 0 0 0 4px #ef4444;
+  }
+
+  .hud-logo {
+    height: 105px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 22px;
+  }
+
+  .hud-timer-box {
+    width: 100%;
+    background: linear-gradient(180deg, #0b4a9f 0%, #05224a 100%);
+    border-top: 4px solid #dc2626;
+    border-radius: 14px;
+    padding: 16px 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .hud-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: #93c5fd;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .live-dot {
+    width: 10px;
+    height: 10px;
+    background: #ef4444;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ef4444;
+    animation: pulse 0.9s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+
+  .hud-digits {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 74px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hud-digits.urgent {
+    color: #fca5a5;
+  }
+
+  /* FINESTRA BROWSER DEL SITO REAL-TIME */
+  #site-showcase {
+    position: absolute;
+    inset: 42px 54px 42px 54px;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 35px 95px rgba(0, 0, 0, 0.8), 0 0 0 3px rgba(255, 255, 255, 0.35);
+    z-index: 20;
+    opacity: 0;
+    transform: translate3d(0, 70px, 0) scale(0.95);
+    will-change: transform, opacity;
+    transition: all 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  #site-showcase.visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  #site-showcase.hidden-out {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  /* Barra indirizzo stile regia sopra il sito */
+  .browser-chrome {
+    height: 48px;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 24px;
+    gap: 14px;
+    border-bottom: 3px solid #dc2626;
+  }
+
+  .url-pill {
+    background: rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 5px 18px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+  }
+
+  .section-badge {
+    background: #dc2626;
+    color: #ffffff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    padding: 4px 14px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Contenitore iframe che scorre fluidamente verso il basso */
+  .iframe-viewport {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 48px);
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .site-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2400px;
+    border: none;
+    will-change: transform;
+    transition: opacity 0.45s ease;
+  }
+
+  .scrolling-home {
+    animation: scrollPageHome 7.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  }
+
+  .scrolling-article {
+    animation: scrollPageArticle 6.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  }
+
+  @keyframes scrollPageHome {
+    0%   { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, -680px, 0); }
+  }
+
+  @keyframes scrollPageArticle {
+    0%   { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, -560px, 0); }
+  }
+</style>
+</head>
+<body>
+
+  <div id="master-stage">
+    <div class="grid-overlay"></div>
+
+    <!-- 1. LOGO + TIMER 20 SECONDI -->
+    <div id="countdown-hud">
+      <img class="hud-logo" src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
+      <div class="hud-timer-box">
+        <div class="hud-label"><span class="live-dot"></span> <span id="hud-status">LA DIRETTA INIZIA TRA</span></div>
+        <div class="hud-digits" id="timer-display">00:20</div>
+      </div>
+    </div>
+
+    <!-- 2. FINESTRA SITO E ULTIMO ARTICOLO -->
+    <div id="site-showcase">
+      <div class="browser-chrome">
+        <div class="section-badge" id="nav-badge">HOME PAGE</div>
+        <div class="url-pill" id="nav-url">https://brunorachiele.it</div>
+      </div>
+      <div class="iframe-viewport">
+        <!-- Frame 1: Home Page -->
+        <iframe id="frame-home" class="site-frame" src="https://brunorachiele.it"></iframe>
+        <!-- Frame 2: Ultimo Articolo (precaricato dal feed RSS) -->
+        <iframe id="frame-article" class="site-frame" style="opacity: 0; pointer-events: none;"></iframe>
+      </div>
+    </div>
+  </div>
+
+<script>
+  let secondsLeft = 20;
+  const timerDisplay = document.getElementById('timer-display');
+  const hud = document.getElementById('countdown-hud');
+  const hudStatus = document.getElementById('hud-status');
+  const showcase = document.getElementById('site-showcase');
+  const frameHome = document.getElementById('frame-home');
+  const frameArticle = document.getElementById('frame-article');
+  const navBadge = document.getElementById('nav-badge');
+  const navUrl = document.getElementById('nav-url');
+
+  // Precarica in background l'URL dell'ultimo articolo dal feed RSS di brunorachiele.it
+  async function preloadLatestArticle() {
+    try {
+      const res = await fetch('https://brunorachiele.it/feed/');
+      const xmlText = await res.text();
+      const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+      const firstLink = doc.querySelector('item > link');
+      if (firstLink && firstLink.textContent) {
+        const articleUrl = firstLink.textContent.trim();
+        frameArticle.src = articleUrl;
+        frameArticle.dataset.url = articleUrl;
+      }
+    } catch (e) {
+      // Fallback sulla sezione ultime notizie se il feed non risponde
+      frameArticle.src = 'https://brunorachiele.it';
+      frameArticle.dataset.url = 'https://brunorachiele.it';
+    }
+  }
+  preloadLatestArticle();
+
+  // Scansione precisa ogni 1000ms da 20 a 0
+  const countdownInterval = setInterval(() => {
+    secondsLeft--;
+
+    if (secondsLeft > 0) {
+      const formatted = secondsLeft < 10 ? `00:0${secondsLeft}` : `00:${secondsLeft}`;
+      timerDisplay.textContent = formatted;
+      if (secondsLeft <= 3) {
+        timerDisplay.classList.add('urgent');
+      }
+    } else {
+      timerDisplay.textContent = 'IN DIRETTA';
+      hudStatus.textContent = 'BENVENUTI IN STUDIO';
+      clearInterval(countdownInterval);
+    }
+
+    // SECONDO 15 (dopo 5s): sposta logo+timer in alto a sinistra e apre la Home Page del sito
+    if (secondsLeft === 15) {
+      hud.classList.add('docked');
+      showcase.classList.add('visible');
+      frameHome.classList.add('scrolling-home');
+    }
+
+    // SECONDO 8 (dopo 12s): passa in automatico all'Ultimo Articolo pubblicato
+    if (secondsLeft === 8) {
+      navBadge.textContent = 'ULTIMO ARTICOLO';
+      if (frameArticle.dataset.url) {
+        navUrl.textContent = frameArticle.dataset.url;
+      }
+      frameHome.style.opacity = '0';
+      frameArticle.style.opacity = '1';
+      frameArticle.classList.add('scrolling-article');
+    }
+
+    // SECONDO 2 (ultimi 2s): chiude il sito e riporta il logo/timer al centro per il lancio
+    if (secondsLeft === 2) {
+      showcase.classList.add('hidden-out');
+      hud.classList.remove('docked');
+      hud.classList.add('final-center');
+    }
+
+    // SECONDO 0: apre a sipario direttamente sulla tua telecamera in studio
+    if (secondsLeft === 0) {
+      setTimeout(() => {
+        document.getElementById('master-stage').classList.add('studio-launch');
+      }, 650);
+    }
+  }, 1000);
+</script>
+</body>
+</html>
