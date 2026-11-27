@@ -17,7 +17,6 @@
     position: relative;
   }
 
-  /* GRIGLIA PROSPETTICA IN MOVIMENTO CONTINUO */
   .grid-overlay {
     position: absolute;
     inset: 0;
@@ -35,7 +34,6 @@
     100% { background-position: 0 128px; }
   }
 
-  /* FASCIO DI LUCE PERIODICO STILE ALL-NEWS */
   .light-sweep {
     position: absolute;
     top: -50%;
@@ -51,7 +49,6 @@
     50%, 100% { transform: translateX(45%); }
   }
 
-  /* ALONE LUMINOSO DIETRO AL LOGO */
   .ambient-glow {
     position: absolute;
     width: 680px;
@@ -67,7 +64,6 @@
     50% { transform: scale(1.08); opacity: 1; }
   }
 
-  /* SOLO LOGO CENTRALE SENZA BOX */
   .logo-only {
     position: relative;
     z-index: 10;
@@ -97,22 +93,16 @@
   <div class="light-sweep"></div>
   <div class="ambient-glow"></div>
 
-  <!-- SOLO IL LOGO -->
   <img class="logo-only" src="https://static.brunorachiele.it/logo.png" alt="Bruno Rachiele">
 
-  <!-- Audio opzionale se carichi musica.mp3 nel repo dirette -->
-  <audio id="bg-music" loop></audio>
+  <audio id="bg-music" src="musica.mp3" autoplay loop preload="auto"></audio>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-
-  // Se aggiungi ?audio=musica.mp3 all'URL riproduce il file audio in loop
-  if (params.get('audio')) {
-    const audioEl = document.getElementById('bg-music');
-    audioEl.src = params.get('audio');
-    audioEl.volume = 0.35;
-    audioEl.play().catch(() => {});
-  }
+  const audioEl = document.getElementById('bg-music');
+  audioEl.volume = 0.5;
+  audioEl.play().catch(() => {
+    document.addEventListener('click', () => audioEl.play(), { once: true });
+  });
 </script>
 </body>
 </html>
