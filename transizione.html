@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Transizione Logo - brunorachiele.it</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  /* Tendina blu/rossa stile all-news che entra ed esce in 1.1 secondi */
+  .wipe-panel {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0b4a9f 0%, #051937 100%);
+    border-bottom: 12px solid #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate3d(-105%, 0, 0);
+    will-change: transform;
+    animation: cnnSweep 1.15s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  }
+
+  .wipe-panel img {
+    width: 640px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.55));
+  }
+
+  @keyframes cnnSweep {
+    0%   { transform: translate3d(-105%, 0, 0); }
+    35%  { transform: translate3d(0%, 0, 0); }
+    65%  { transform: translate3d(0%, 0, 0); }
+    100% { transform: translate3d(105%, 0, 0); }
+  }
+</style>
+</head>
+<body>
+  <div class="wipe-panel">
+    <img src="https://static.brunorachiele.it/logoorizzontalebianco.png" alt="Bruno Rachiele">
+  </div>
+</body>
+</html>
