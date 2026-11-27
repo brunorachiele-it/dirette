@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Transizione Stinger CNN - brunorachiele.it</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #00ff00; /* Verde Chroma Key puro per OBS */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 1. FASCIA ROSSA DI APERTURA (stile CNN Breaking) */
+  .wipe-red {
+    position: absolute;
+    inset: 0;
+    background: #cc0000;
+    transform: translateX(-100%);
+    animation: wipePass 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    z-index: 1;
+  }
+
+  /* 2. FASCIA PRINCIPALE SCURA CON IL LOGO (copre lo schermo al 50%) */
+  .wipe-dark {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0a192f 0%, #050b14 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-100%);
+    animation: wipePass 1.4s cubic-bezier(0.77, 0, 0.175, 1) 0.08s forwards;
+    z-index: 2;
+  }
+
+  /* FILETTO ROSSO INFERIORE STILE ALL-NEWS */
+  .wipe-dark::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: #cc0000;
+  }
+
+  /* LOGO ORIZZONTALE BIANCO */
+  .logo-cnn {
+    width: 680px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.6));
+    animation: logoZoom 1.4s ease-out 0.08s forwards;
+  }
+
+  /* Animazione completa: entra da sinistra -> copre al centro -> esce a destra */
+  @keyframes wipePass {
+    0%   { transform: translateX(-100%); }
+    38%  { transform: translateX(0%); }
+    62%  { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes logoZoom {
+    0%   { transform: scale(0.88); }
+    50%  { transform: scale(1.0); }
+    100% { transform: scale(1.08); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wipe-red"></div>
+  <div class="wipe-dark">
+    <img class="logo-cnn" src="https://static.brunorachiele.it/logoorizzontalebianco.png" alt="Bruno Rachiele">
+  </div>
+
+</body>
+</html>
